@@ -27,7 +27,7 @@ var (
 		SourceGitTree: "exp0",
 		//Dest: soteriaSoterd,
 		Dest: colakongSoterd,
-		DestGitTree: "master",
+		DestGitTree: "superBranch",
 	}
 
 	soterdash = repo.RepoPair{

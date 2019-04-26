@@ -81,6 +81,23 @@ func GitArchive(src, tree, dst string) error {
 	return nil
 }
 
+// GitCheckout switches the checkout to the given tree
+func GitCheckout(path, tree string) error {
+	git, exists := Which("git")
+	if !exists {
+		return fmt.Errorf("Couldn't find git command")
+	}
+
+	cmd := exec.Command(git, "checkout", tree)
+	cmd.Dir = path
+	output, err := cmd.CombinedOutput()
+	if err != nil {
+		return fmt.Errorf("%s\n%s", output, err)
+	}
+
+	return nil
+}
+
 // GitCommit commits all tracked files to the repository
 func GitCommit(path, msg string) (error) {
 	git, exists := Which("git")

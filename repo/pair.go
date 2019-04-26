@@ -123,6 +123,16 @@ func (r *RepoPair) Sync(keepStaging, skipAsk bool) error {
 
 	fmt.Println("Cloned dest", r.Dest.Path, "to", dst)
 
+	// Switch to the Dest tree, so that when we Archive/Commit to Dest, the content is being committed
+	// to the correct branch regardless of what the default branch is set to.
+	err = tools.GitCheckout(dst, r.DestGitTree)
+	if err != nil {
+		cleanup = false
+		return fmt.Errorf("Failed to checkout to %s on %s: %s", r.DestGitTree, r.Dest.Path, err)
+	}
+
+	fmt.Println("Checked out to", r.DestGitTree)
+
 	// Archive files from Source to Dest
 	err = tools.GitArchive(src, r.SourceGitTree, dst)
 	if err != nil {
