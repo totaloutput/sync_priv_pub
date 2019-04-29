@@ -13,6 +13,8 @@ Usage of soterium_to_soteria-dag:
   -k    Keep staging area after completed
   -m string
         Commit message to use (default "soterium_to_soteria-dag - Auto code sync")
+  -nodep
+        Skip processing of repo dependencies
   -soterd
         Sync soterd
   -soterdash
@@ -22,7 +24,6 @@ Usage of soterium_to_soteria-dag:
   -soterwallet
         Sync soterwallet
   -y    Skip confirmation with user before git commit & push of synced repo contents
-
 ```
 
 # Use
@@ -40,9 +41,10 @@ Usage of soterium_to_soteria-dag:
     soterium_to_soteria-dag -soterd -m "Fixed typo in blockdag.go"
     ```
 
-    This will sync from `github.com/soteria-dag/soterd` to `github.com/soterium/soterd`
+    This will sync from `github.com/soteria-dag/soterdash` to `github.com/soterium/soterdash`, but **skip** sync of
+    soterdash dependency `soterd` (`-nodep` flag).
     ```bash
-    soteria-dag_to_soterium -soterd -m "Backport community fix for block sync"
+    soteria-dag_to_soterium -soterdash -nodep -m "Backport census worker fix"
     ```
 
 # Testing repo sync
