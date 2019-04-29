@@ -51,7 +51,7 @@ func (r *RepoPair) String() string {
 
 // Sync syncs changes from the Source repo to the Dest repo,
 // while also replacing references of the source in the destination.
-func (r *RepoPair) Sync(keepStaging, skipAsk bool) error {
+func (r *RepoPair) Sync(keepStaging, skipAsk bool, commitMsg string) error {
 	_, exists := done[r.String()]
 	if exists {
 		// Don't process the same repo more than once in the same run
@@ -62,7 +62,7 @@ func (r *RepoPair) Sync(keepStaging, skipAsk bool) error {
 	// Process dependencies first
 	for _, dep := range r.Dependencies {
 		fmt.Println("Processing dependency", dep.String())
-		err := dep.Sync(keepStaging, skipAsk)
+		err := dep.Sync(keepStaging, skipAsk, commitMsg)
 		if err != nil {
 			return fmt.Errorf("Failed to sync dependency %s: %s", dep, err)
 		}
@@ -269,7 +269,6 @@ func (r *RepoPair) Sync(keepStaging, skipAsk bool) error {
 	}
 
 	// Commit changes
-	commitMsg := fmt.Sprintf("%s - Auto code sync", tools.ThisFile())
 	err = tools.GitCommit(dst, commitMsg)
 	if err != nil {
 		cleanup = false
