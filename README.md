@@ -28,13 +28,23 @@ Usage of soterium_to_soteria-dag:
 
 # Use
 
-1. Build and install
+1. Make sure `go mod` tooling can access any _private repos_
+
+    If one or more of the repos you are syncing is _private_, you may want to redirect git requests using https to use ssh instead. This allows `go mod`and related package-management tools to work in a situation where they can't prompt for user input (github.com user/pass). In the example below, we are redirecting requests for the private `github.com/soterium` repositories.
+    ```bash
+    # Add this section to your ~/.gitconfig file
+
+    [url "ssh://git@github.com/soterium/"]
+        insteadOf = https://github.com/soterium/
+    ```
+
+2. Build and install
 
     ```bash
     go install -v ./cmd/... && echo "install ok"
     ```
 
-2. Sync repositories
+3. Sync repositories
 
     This will sync from `github.com/soterium/soterd` to `github.com/soteria-dag/soterd`
     ```bash
