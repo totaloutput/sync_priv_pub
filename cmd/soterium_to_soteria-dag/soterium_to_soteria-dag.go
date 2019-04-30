@@ -46,6 +46,7 @@ var (
 		SourceGitTree: "exp0",
 		Dest: soteriaSoterWallet,
 		DestGitTree: "master",
+		Dependencies: []*repo.RepoPair{&soterd},
 	}
 
 	sotertools = repo.RepoPair{
@@ -53,6 +54,7 @@ var (
 		SourceGitTree: "master",
 		Dest: soteriaSoterTools,
 		DestGitTree: "master",
+		Dependencies: []*repo.RepoPair{&soterd, &soterwallet},
 	}
 )
 
