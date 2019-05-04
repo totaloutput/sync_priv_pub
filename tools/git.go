@@ -161,7 +161,7 @@ func GitPrune(path, cmp string) ([]string, error) {
 		oInfo, err := os.Stat(o)
 		if os.IsNotExist(err) {
 			// Remove the file, because it doesn't exist in cmp
-			cmd := exec.Command(git, "rm", rel)
+			cmd := exec.Command(git, "rm", "-r", rel)
 			cmd.Dir = path
 			output, err := cmd.CombinedOutput()
 			if err != nil {
