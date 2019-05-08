@@ -42,6 +42,8 @@ type RepoPair struct {
 	// Pairs that should be synced before this one, due to module dependencies
 	// between the involved repos.
 	Dependencies  []*RepoPair
+	// Sets of strings {old, new} that should be replaced in files outside of renameExclude during sync
+	Replace [][]string
 }
 
 // Return a string representing the RepoPair
@@ -192,6 +194,20 @@ func (r *RepoPair) Sync(keepStaging, skipAsk, skipDeps bool, commitMsg string) e
 		}
 
 		fmt.Printf("%s\tmade %d replacements for %s => %s\n", r.Dest.Path, count, dep.Source.RepoPath(), dep.Dest.RepoPath())
+	}
+
+	// Replace custom strings
+	for _, replaceCase := range r.Replace {
+		if len(replaceCase) != 2 {
+			return fmt.Errorf("Can't apply replacement (%s): Need to specify an old and new string", replaceCase)
+		}
+
+		old, new := replaceCase[0], replaceCase[1]
+		count, err = tools.ReplaceR(dst, old, new, renameExclude...)
+		if err != nil {
+			cleanup = false
+			return fmt.Errorf("Failed to replace %s with %s in %s: %s", old, new, dst, err)
+		}
 	}
 
 	// Determine if go module file exists in Dest repo

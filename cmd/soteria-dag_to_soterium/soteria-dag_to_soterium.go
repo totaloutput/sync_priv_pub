@@ -31,6 +31,10 @@ var (
 		SourceGitTree: "master",
 		Dest: soteriumSoterd,
 		DestGitTree: "exp0",
+		Replace: [][]string{
+			{"soteria-dag", "soterium"},
+			{"Soteria DAG", "Soterium"},
+		},
 	}
 
 	soterdash = repo.RepoPair{
