@@ -208,6 +208,8 @@ func (r *RepoPair) Sync(keepStaging, skipAsk, skipDeps bool, commitMsg string) e
 			cleanup = false
 			return fmt.Errorf("Failed to replace %s with %s in %s: %s", old, new, dst, err)
 		}
+
+		fmt.Printf("%s\tmade %d replacements for %s => %s\n", r.Dest.Path, count, old, new)
 	}
 
 	// Determine if go module file exists in Dest repo
