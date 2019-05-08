@@ -51,6 +51,9 @@ var (
 		Dest: soteriumSoterWallet,
 		DestGitTree: "exp0",
 		Dependencies: []*repo.RepoPair{&soterd},
+		Replace: [][]string{
+			{"soteria-dag", "soterium"},
+		},
 	}
 
 	sotertools = repo.RepoPair{
@@ -59,6 +62,9 @@ var (
 		Dest: soteriaSoterTools,
 		DestGitTree: "master",
 		Dependencies: []*repo.RepoPair{&soterd, &soterwallet},
+		Replace: [][]string{
+			{"Soteria DAG", "Soterium"},
+		},
 	}
 )
 
