@@ -3,7 +3,7 @@ Go repo sync
 
 This utility assists in syncing changes between repositories containing [Go](https://golang.org/) programs. Go [doesn't allow for relative import paths](https://golang.org/pkg/cmd/go/internal/help/#HelpImportPath), which makes contributing changes between forks/copies of repositories under different namepsaces more complicated.
 
-An example program, `sync_priv_pub` is in the root directory, and variations of it meant for sync between specific repositories are in the [cmd](cmd) directory. The variations will have cli flags like this:
+An example program, `example.go` is in the root directory, and variations of it meant for sync between specific repositories are in the [cmd](cmd) directory. The variations will have cli flags like this:
 
 ```
 $ soterium_to_soteria-dag -h
@@ -59,13 +59,13 @@ Usage of soterium_to_soteria-dag:
 
 # Testing repo sync
 
-1. Update the `sync_priv_pub.go` file with the repositories you want to sync
+1. Update the `example.go` file with the repositories you want to sync
 
 2. Build and run the command
 
     ```bash
     go build . && echo "build ok"
-    ./sync_priv_pub -all
+    ./example -all
     ```
 
 # What the tool does
