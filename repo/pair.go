@@ -53,7 +53,7 @@ func (r *RepoPair) String() string {
 
 // Sync syncs changes from the Source repo to the Dest repo,
 // while also replacing references of the source in the destination.
-func (r *RepoPair) Sync(keepStaging, skipAsk, skipDeps bool, commitMsg string) error {
+func (r *RepoPair) Sync(keepStaging, skipAsk, skipDeps bool, commitMsg, emailAddr string) error {
 	_, exists := done[r.String()]
 	if exists {
 		// Don't process the same repo more than once in the same run
@@ -65,7 +65,7 @@ func (r *RepoPair) Sync(keepStaging, skipAsk, skipDeps bool, commitMsg string) e
 		// Process dependencies first
 		for _, dep := range r.Dependencies {
 			fmt.Println("Processing dependency", dep.String())
-			err := dep.Sync(keepStaging, skipAsk, skipDeps, commitMsg)
+			err := dep.Sync(keepStaging, skipAsk, skipDeps, commitMsg, emailAddr)
 			if err != nil {
 				return fmt.Errorf("Failed to sync dependency %s: %s", dep, err)
 			}
@@ -286,6 +286,14 @@ func (r *RepoPair) Sync(keepStaging, skipAsk, skipDeps bool, commitMsg string) e
 	if err != nil {
 		cleanup = false
 		return fmt.Errorf("Failed to git-add new files to %s: %s", dst, err)
+	}
+
+	if len(emailAddr) > 0 {
+		err = tools.GitEmail(dst, emailAddr)
+		if err != nil {
+			cleanup = false
+			return fmt.Errorf("Failed to set git config email address in %s to %s: %s", dst, emailAddr, err)
+		}
 	}
 
 	// Commit changes

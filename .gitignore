@@ -25,4 +25,6 @@ _cgo_export.*
 _testmain.go
 
 *.exe
-sync_priv_pub
+example
+soterium_to_soteria-dag
+soteria-dag_to_soterium

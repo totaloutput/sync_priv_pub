@@ -10,6 +10,8 @@ $ soterium_to_soteria-dag -h
 Usage of soterium_to_soteria-dag:
   -all
         Sync all repos
+  -e string
+        Email address to use for commit
   -k    Keep staging area after completed
   -m string
         Commit message to use (default "soterium_to_soteria-dag - Auto code sync")
@@ -48,13 +50,13 @@ Usage of soterium_to_soteria-dag:
 
     This will sync from `github.com/soterium/soterd` to `github.com/soteria-dag/soterd`
     ```bash
-    soterium_to_soteria-dag -soterd -m "Fixed typo in blockdag.go"
+    soterium_to_soteria-dag -soterd -e banana@fogscape.net -m "Fixed typo in blockdag.go"
     ```
 
     This will sync from `github.com/soteria-dag/soterdash` to `github.com/soterium/soterdash`, but **skip** sync of
     soterdash dependency `soterd` (`-nodep` flag).
     ```bash
-    soteria-dag_to_soterium -soterdash -nodep -m "Backport census worker fix"
+    soteria-dag_to_soterium -soterdash -nodep -e banana@fogscape.net -m "Backport census worker fix"
     ```
 
 # Testing repo sync
@@ -83,4 +85,5 @@ Usage of soterium_to_soteria-dag:
     * Because dependencies were processed first, their new [pseudo version](https://golang.org/cmd/go/#hdr-Pseudo_versions) can be used here.
 * Adds new untracked files in Dest.
 * Commits changes to local Dest clone
+    * If an email address was specified, this is used for the commit instead of your global default.
 * Pushes changes to Dest git tree (branch)

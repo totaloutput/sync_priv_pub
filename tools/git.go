@@ -120,6 +120,23 @@ func GitCommit(path, msg string) (error) {
 	return nil
 }
 
+// GitEmail sets the email address for commits in local git config
+func GitEmail(path, email string) (error) {
+	git, exists := Which("git")
+	if !exists {
+		return fmt.Errorf("Couldn't find git command")
+	}
+
+	cmd := exec.Command(git, "config", "--local", "user.email", email)
+	cmd.Dir = path
+	output, err := cmd.CombinedOutput()
+	if err != nil {
+		return fmt.Errorf("%s\n%s", output, err)
+	}
+
+	return nil
+}
+
 // GitPrune issues "git rm" in path for items in path that aren't in cmp,
 // and returns a list of removed items.
 func GitPrune(path, cmp string) ([]string, error) {

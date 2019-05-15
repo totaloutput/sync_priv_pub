@@ -77,11 +77,12 @@ func abort(msg string) {
 func main() {
 	defaultCommitMsg := fmt.Sprintf("%s - Auto code sync", tools.ThisFile())
 
-	var commitMsg string
+	var commitMsg, emailAddr string
 	var keepStaging, skipAsk, skipDeps bool
 	var syncAll, syncSoterd, syncSoterDash, syncSoterWallet, syncSoterTools bool
 	flag.BoolVar(&keepStaging, "k", false,"Keep staging area after completed")
 	flag.StringVar(&commitMsg, "m", defaultCommitMsg, "Commit message to use")
+	flag.StringVar(&emailAddr, "e", "", "Email address to use for commit")
 	flag.BoolVar(&skipAsk, "y", false,"Skip confirmation with user before git commit & push of synced repo contents")
 	flag.BoolVar(&skipDeps, "nodep", false, "Skip processing of repo dependencies")
 	flag.BoolVar(&syncAll, "all", false, "Sync all repos")
@@ -113,7 +114,7 @@ func main() {
 	// Sync repositories
 	if syncSoterd {
 		fmt.Println("Syncing", soterd.String())
-		err := soterd.Sync(keepStaging, skipAsk, skipDeps, commitMsg)
+		err := soterd.Sync(keepStaging, skipAsk, skipDeps, commitMsg, emailAddr)
 		if err != nil {
 			abort(fmt.Sprintf("Failed to sync %s:\n%s", soterd.String(), err))
 		}
@@ -123,7 +124,7 @@ func main() {
 
 	if syncSoterDash {
 		fmt.Println("Syncing", soterdash.String())
-		err := soterdash.Sync(keepStaging, skipAsk, skipDeps, commitMsg)
+		err := soterdash.Sync(keepStaging, skipAsk, skipDeps, commitMsg, emailAddr)
 		if err != nil {
 			abort(fmt.Sprintf("Failed to sync %s:\n%s", soterdash.String(), err))
 		}
@@ -133,7 +134,7 @@ func main() {
 
 	if syncSoterWallet {
 		fmt.Println("Syncing", soterwallet.String())
-		err := soterwallet.Sync(keepStaging, skipAsk, skipDeps, commitMsg)
+		err := soterwallet.Sync(keepStaging, skipAsk, skipDeps, commitMsg, emailAddr)
 		if err != nil {
 			abort(fmt.Sprintf("Failed to sync %s:\n%s", soterwallet.String(), err))
 		}
@@ -143,7 +144,7 @@ func main() {
 
 	if syncSoterTools {
 		fmt.Println("Syncing", sotertools.String())
-		err := sotertools.Sync(keepStaging, skipAsk, skipDeps, commitMsg)
+		err := sotertools.Sync(keepStaging, skipAsk, skipDeps, commitMsg, emailAddr)
 		if err != nil {
 			abort(fmt.Sprintf("Failed to sync %s:\n%s", sotertools.String(), err))
 		}
