@@ -121,13 +121,18 @@ func GitCommit(path, msg string) (error) {
 }
 
 // GitEmail sets the email address for commits in local git config
-func GitEmail(path, email string) (error) {
+func GitEmail(path, email string) error {
+	return GitLocalConfig(path, "user.email", email)
+}
+
+// GitLocalConfig sets local git config setting
+func GitLocalConfig(path, setting, value string) error {
 	git, exists := Which("git")
 	if !exists {
 		return fmt.Errorf("Couldn't find git command")
 	}
 
-	cmd := exec.Command(git, "config", "--local", "user.email", email)
+	cmd := exec.Command(git, "config", "--local", setting, value)
 	cmd.Dir = path
 	output, err := cmd.CombinedOutput()
 	if err != nil {
@@ -250,4 +255,9 @@ func GitUntracked(path string) ([]string, error) {
 	}
 
 	return untracked, nil
+}
+
+// GitUserName sets the user name for commits in local git config
+func GitUserName(path, userName string) error {
+	return GitLocalConfig(path, "user.name", userName)
 }

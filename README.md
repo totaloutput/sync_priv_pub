@@ -25,6 +25,8 @@ Usage of soterium_to_soteria-dag:
         Sync sotertools
   -soterwallet
         Sync soterwallet
+  -u string
+        User name to use for commit
   -y    Skip confirmation with user before git commit & push of synced repo contents
 ```
 
@@ -50,13 +52,13 @@ Usage of soterium_to_soteria-dag:
 
     This will sync from `github.com/soterium/soterd` to `github.com/soteria-dag/soterd`
     ```bash
-    soterium_to_soteria-dag -soterd -e banana@fogscape.net -m "Fixed typo in blockdag.go"
+    soterium_to_soteria-dag -soterd -e banana@fogscape.net -u "Banana Man" -m "Fixed typo in blockdag.go"
     ```
 
     This will sync from `github.com/soteria-dag/soterdash` to `github.com/soterium/soterdash`, but **skip** sync of
     soterdash dependency `soterd` (`-nodep` flag).
     ```bash
-    soteria-dag_to_soterium -soterdash -nodep -e banana@fogscape.net -m "Backport census worker fix"
+    soteria-dag_to_soterium -soterdash -nodep -e banana@fogscape.net -u "Banana Man" -m "Backport census worker fix"
     ```
 
 # Testing repo sync
