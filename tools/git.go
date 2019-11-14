@@ -125,6 +125,23 @@ func GitEmail(path, email string) error {
 	return GitLocalConfig(path, "user.email", email)
 }
 
+// GitFetchAll fetches all remote branches
+func GitFetchAll(path string) error {
+	git, exists := Which("git")
+	if !exists {
+		return fmt.Errorf("Couldn't find git command")
+	}
+
+	cmd := exec.Command(git, "fetch", "--all")
+	cmd.Dir = path
+	output, err := cmd.CombinedOutput()
+	if err != nil {
+		return fmt.Errorf("%s\n%s", output, err)
+	}
+
+	return nil
+}
+
 // GitLocalConfig sets local git config setting
 func GitLocalConfig(path, setting, value string) error {
 	git, exists := Which("git")

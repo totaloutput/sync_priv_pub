@@ -127,6 +127,28 @@ func (r *RepoPair) Sync(keepStaging, skipAsk, skipDeps bool, commitMsg, emailAdd
 
 	fmt.Println("Cloned dest", r.Dest.Path, "to", dst)
 
+	// Fetch all the remote branches, so that we can checkout to them, if syncing between non-default branches
+	err = tools.GitFetchAll(src)
+	if err != nil {
+		cleanup = false
+		return fmt.Errorf("Failed to fetch all remote branches for %s: %s", src, err)
+	}
+
+	err = tools.GitFetchAll(dst)
+	if err != nil {
+		cleanup = false
+		return fmt.Errorf("Failed to fetch all remote branches for %s: %s", dst, err)
+	}
+
+	// Switch to Source tree, so that Archive works regardless of what the default branch is set to.
+	err = tools.GitCheckout(src, r.SourceGitTree)
+	if err != nil {
+		cleanup = false
+		return fmt.Errorf("Failed to checkout to %s on %s: %s", r.SourceGitTree, r.Source.Path, err)
+	}
+
+	fmt.Println("Checked out to", r.SourceGitTree, "in", src)
+
 	// Switch to the Dest tree, so that when we Archive/Commit to Dest, the content is being committed
 	// to the correct branch regardless of what the default branch is set to.
 	err = tools.GitCheckout(dst, r.DestGitTree)
@@ -135,13 +157,13 @@ func (r *RepoPair) Sync(keepStaging, skipAsk, skipDeps bool, commitMsg, emailAdd
 		return fmt.Errorf("Failed to checkout to %s on %s: %s", r.DestGitTree, r.Dest.Path, err)
 	}
 
-	fmt.Println("Checked out to", r.DestGitTree)
+	fmt.Println("Checked out to", r.DestGitTree, "in", dst)
 
 	// Archive files from Source to Dest
 	err = tools.GitArchive(src, r.SourceGitTree, dst)
 	if err != nil {
 		cleanup = false
-		return fmt.Errorf("Failed to archive from %s to %s: %s", src, r.SourceGitTree, dst, err)
+		return fmt.Errorf("Failed to archive from %s to %s at %s: %s", src, r.SourceGitTree, dst, err)
 	}
 
 	fmt.Println("Archived files from", src, "tree", r.SourceGitTree, "to", dst)

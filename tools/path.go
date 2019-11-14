@@ -2,6 +2,7 @@ package tools
 
 import (
 	"os"
+	"path"
 	"path/filepath"
 	"strings"
 )
@@ -27,6 +28,26 @@ func IsUnder(a, b string) bool {
 	}
 
 	return false
+}
+
+// GoBin returns the GOBIN path
+func GoBin() string {
+	goBin, exists := os.LookupEnv("GOBIN")
+	if exists {
+		return goBin
+	}
+
+	goPath, exists := os.LookupEnv("GOPATH")
+	if exists {
+		return path.Join(goPath, "bin")
+	}
+
+	home, exists := os.LookupEnv("HOME")
+	if exists {
+		return path.Join(home, "go", "bin")
+	}
+
+	return ""
 }
 
 // ThisFile returns the name of the running process's executable
